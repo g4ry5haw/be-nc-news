@@ -8,12 +8,7 @@ exports.selectTopics = () => {
   `
     )
     .then((result) => {
-      if (result.rows.length === 0) {
-        return Promise.reject({
-          status: 204,
-          msg: "no content",
-        });
-      }
+      console.log('model')
       return result.rows;
     });
 };
