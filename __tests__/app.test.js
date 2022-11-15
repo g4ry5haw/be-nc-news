@@ -18,9 +18,9 @@ describe("GET /api/topics", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toBeInstanceOf(Array);
-        expect(body).not.toHaveLength(0);
-        body.forEach((topic) => {
+        expect(body.topic).toBeInstanceOf(Array);
+        expect(body.topic).not.toHaveLength(0);
+        body.topic.forEach((topic) => {
           expect(topic).toMatchObject({
             slug: expect.any(String),
             description: expect.any(String),
@@ -45,10 +45,10 @@ describe("GET /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
-        expect(body).toBeInstanceOf(Array);
-        expect(body).not.toHaveLength(0);
-        expect(body).toBeSortedBy("created_at", { descending: true });
-        body.forEach((article) => {
+        expect(body.article).toBeInstanceOf(Array);
+        expect(body.article).not.toHaveLength(0);
+        expect(body.article).toBeSortedBy("created_at", { descending: true });
+        body.article.forEach((article) => {
           expect(article).toMatchObject({
             author: expect.any(String),
             title: expect.any(String),
