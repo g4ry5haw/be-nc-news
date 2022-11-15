@@ -1,4 +1,5 @@
-const { selectTopics } = require("../models/news.model");
+const { response } = require("../app");
+const { selectTopics, selectArticles } = require("../models/news.model");
 
 exports.getTopics = (req, res, next) => {
   selectTopics()
@@ -6,7 +7,16 @@ exports.getTopics = (req, res, next) => {
       res.status(200).send(response);
     })
     .catch((err) => {
-      console.log('controller error')
+      next(err);
+    });
+};
+
+exports.getArticles = (req, res, next) => {
+  selectArticles()
+    .then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((err) => {
       next(err);
     });
 };
