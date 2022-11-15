@@ -13,7 +13,6 @@ exports.selectTopics = () => {
 };
 
 exports.selectArticles = () => {
-  console.log("from model selectArticlesc");
   return db
     .query(
       `
