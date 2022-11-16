@@ -55,7 +55,6 @@ exports.postComment = (req, res, next) => {
   console.log(newComment);
   insertComment(article_id, newComment)
     .then((response) => {
-      console.log({comment:response}, 'controller response')
       res.status(201).send({ comment: response });
     })
     .catch((err) => {
