@@ -19,7 +19,6 @@ exports.getTopics = (req, res, next) => {
 exports.getArticles = (req, res, next) => {
   selectArticles()
     .then((response) => {
-      console.log({ article: response });
       res.status(200).send({ article: response });
     })
     .catch((err) => {
