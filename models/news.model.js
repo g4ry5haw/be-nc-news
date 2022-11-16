@@ -44,3 +44,21 @@ exports.selectArticleById = (article_id) => {
       });
   });
 };
+
+exports.selectCommentsByArticleId = (article_id) => {
+  return checkArticleExists(article_id).then(() => {
+    return db
+      .query(
+        `
+      SELECT * from comments
+      WHERE article_id = $1
+      ORDER BY created_at DESC
+      `,
+        [article_id]
+      )
+      .then((result) => {
+        // console.log(result.rows)
+        return result.rows;
+      });
+  });
+};
