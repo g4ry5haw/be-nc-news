@@ -162,3 +162,26 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: request body accepts an object with username and body & responds with the posted comment", () => {
+    const newComment = {
+      username: "rogersop",
+      body: "There are 2 rules in life.  1. Never give away all your secrets  2.",
+    };
+    return request(app)
+      .post("/api/articles/6/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: newComment.body,
+          article_id: 6,
+          author: newComment.username,
+          votes: 0,
+          created_at: expect.any(String),
+        });
+      });
+  });
+});

@@ -61,3 +61,29 @@ exports.selectCommentsByArticleId = (article_id) => {
       });
   });
 };
+
+exports.insertComment = (article_id, newComment) => {
+  console.log('model - b4 check article exists')
+  return checkArticleExists(article_id).then(() => {
+    console.log('model - after check article exists')
+    console.log(article_id, 'article_id')
+    console.log(newComment, 'newComment')
+    console.log(newComment.username, 'newComment.username')
+    console.log(newComment.body, 'newComment.body')
+    return db
+      .query(
+        `
+      INSERT INTO comments
+      (article_id, author, body)
+      VALUES
+      ($1, $2, $3)
+      RETURNING *;
+      `,
+        [article_id, newComment.username, newComment.body]
+      )
+      .then((result) => {
+        console.log(result.rows[0], 'model result')
+        return result.rows[0];
+      });
+  });
+};

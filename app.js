@@ -4,9 +4,11 @@ const {
   getArticles,
   getArticleById,
   getCommentsByArticleId,
+  postComment,
 } = require("./controller/news.controller");
 
 const app = express();
+app.use(express.json());
 
 app.get("/api/topics", getTopics);
 
@@ -15,6 +17,8 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+
+app.post("/api/articles/:article_id/comments", postComment);
 
 app.use((err, req, res, next) => {
   if (err.status === 204 && err.msg === "no content") {
