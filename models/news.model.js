@@ -57,7 +57,6 @@ exports.selectCommentsByArticleId = (article_id) => {
         [article_id]
       )
       .then((result) => {
-        // console.log(result.rows)
         return result.rows;
       });
   });
