@@ -112,3 +112,15 @@ exports.updateVotesById = (article_id, voteValue) => {
       });
   });
 };
+
+exports.selectUsers = () => {
+  return db
+    .query(
+      `
+  SELECT * FROM users
+  `
+    )
+    .then((result) => {
+      return result.rows;
+    });
+};
