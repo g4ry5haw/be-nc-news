@@ -6,12 +6,15 @@ const {
   getCommentsByArticleId,
   postComment,
   patchVotesById,
+  getUsers,
 } = require("./controller/news.controller");
 
 const app = express();
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
+
+app.get("/api/users", getUsers);
 
 app.get("/api/articles", getArticles);
 
