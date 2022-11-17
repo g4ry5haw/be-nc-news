@@ -334,3 +334,16 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("400: returns an error for an incorrect key on the body", () => {
+    const voteUpdate = { wrong_key: 10 };
+    return request(app)
+      .patch("/api/articles/5/")
+      .send(voteUpdate)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Incorrect key");
+      });
+  });
+});

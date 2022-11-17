@@ -56,6 +56,14 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  if (err.status === 400 && err.msg === "Incorrect key") {
+    res.status(err.status).send({ msg: err.msg });
+  } else {
+    next(err);
+  }
+});
+
+app.use((err, req, res, next) => {
   if (err.status === 404 && err.msg === "Article not found") {
     res.status(err.status).send({ msg: err.msg });
   } else {
