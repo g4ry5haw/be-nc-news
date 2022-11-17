@@ -295,3 +295,42 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("400: responds with an appropriate error message when the vote is not a number", () => {
+    const voteUpdate = { inc_votes: "ten" };
+    return request(app)
+      .patch("/api/articles/2")
+      .send(voteUpdate)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("400: returns an error for a vote on an invalid article id", () => {
+    const voteUpdate = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/articles/cats/")
+      .send(voteUpdate)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid article");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("404: returns an error for a vote posted on a well formed article id that is not found", () => {
+    const voteUpdate = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/articles/54321/")
+      .send(voteUpdate)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found");
+      });
+  });
+});

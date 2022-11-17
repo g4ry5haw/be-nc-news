@@ -25,7 +25,6 @@ exports.selectArticles = () => {
       `
     )
     .then((result) => {
-      console.log(result.rows)
       return result.rows;
     });
 };
@@ -89,7 +88,11 @@ exports.insertComment = (article_id, newComment) => {
 
 exports.updateVotesById = (article_id, voteValue) => {
   return checkArticleExists(article_id).then(() => {
-    console.log("model post check article");
+    //check vote value is numeric either positive or negative
+    const regex = /^[-0-9]*$/;
+    if (!regex.test(voteValue.inc_votes)) {
+      return Promise.reject({ status: 400, msg: "Bad request" });
+    }
     return db
       .query(
         `
@@ -101,7 +104,6 @@ exports.updateVotesById = (article_id, voteValue) => {
         [article_id, voteValue.inc_votes]
       )
       .then((result) => {
-        console.log(result.rows, "model result");
         return result.rows;
       });
   });
