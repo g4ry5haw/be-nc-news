@@ -247,3 +247,103 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("201: request body accepts an object with newVote of +10 & responds with the updated article", () => {
+    const voteUpdate = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(voteUpdate)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.article).toBeInstanceOf(Array);
+        expect(body.article).toHaveLength(1);
+        body.article.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: 1,
+            author: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: 110,
+          });
+        });
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("201: request body accepts an object with newVote of -10 & responds with the updated article", () => {
+    const voteUpdate = { inc_votes: -10 };
+    return request(app)
+      .patch("/api/articles/2")
+      .send(voteUpdate)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.article).toBeInstanceOf(Array);
+        expect(body.article).toHaveLength(1);
+        body.article.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: 2,
+            author: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: -10,
+          });
+        });
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("400: responds with an appropriate error message when the vote is not a number", () => {
+    const voteUpdate = { inc_votes: "ten" };
+    return request(app)
+      .patch("/api/articles/2")
+      .send(voteUpdate)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("400: returns an error for a vote on an invalid article id", () => {
+    const voteUpdate = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/articles/cats/")
+      .send(voteUpdate)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid article");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("404: returns an error for a vote posted on a well formed article id that is not found", () => {
+    const voteUpdate = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/articles/54321/")
+      .send(voteUpdate)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("400: returns an error for an incorrect key on the body", () => {
+    const voteUpdate = { wrong_key: 10 };
+    return request(app)
+      .patch("/api/articles/5/")
+      .send(voteUpdate)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Incorrect key");
+      });
+  });
+});
