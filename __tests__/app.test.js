@@ -162,3 +162,88 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: request body accepts an object with username and body & responds with the posted comment", () => {
+    const newComment = {
+      username: "rogersop",
+      body: "There are 2 rules in life.  1. Never give away all your secrets  2.",
+    };
+    return request(app)
+      .post("/api/articles/6/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: newComment.body,
+          article_id: 6,
+          author: newComment.username,
+          votes: 0,
+          created_at: expect.any(String),
+        });
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("400: responds with an appropriate error message when provided with no comment", () => {
+    const newComment = {
+      username: "rogersop",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("400: returns an error for an invalid user", () => {
+    const newComment = {
+      username: "footy_fan",
+      body: "it's coming home....it's coming home.. etc. etc.",
+    };
+    return request(app)
+      .post("/api/articles/4/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid User");
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("400: returns an error for a comment posted on an invalid article id", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "My wife asked if I'd seen the dog bowl? I said I didn't know he could bowl!",
+    };
+    return request(app)
+      .post("/api/articles/dadjoke/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid article");
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("404: returns an error for a comment posted on a well formed article id that is not found", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "What is the airspeed velocity of an unladen swallow?",
+    };
+    return request(app)
+      .get("/api/articles/123456/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found");
+      });
+  });
+});
