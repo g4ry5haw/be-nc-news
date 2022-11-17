@@ -25,6 +25,7 @@ exports.selectArticles = () => {
       `
     )
     .then((result) => {
+      console.log(result.rows)
       return result.rows;
     });
 };
@@ -83,5 +84,25 @@ exports.insertComment = (article_id, newComment) => {
           return result.rows[0];
         });
     });
+  });
+};
+
+exports.updateVotesById = (article_id, voteValue) => {
+  return checkArticleExists(article_id).then(() => {
+    console.log("model post check article");
+    return db
+      .query(
+        `
+      UPDATE articles
+      SET VOTES = VOTES + $2
+      WHERE article_id = $1
+      RETURNING *;
+      `,
+        [article_id, voteValue.inc_votes]
+      )
+      .then((result) => {
+        console.log(result.rows, "model result");
+        return result.rows;
+      });
   });
 };

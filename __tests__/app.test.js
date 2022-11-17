@@ -247,3 +247,51 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("201: request body accepts an object with newVote of +10 & responds with the updated article", () => {
+    const voteUpdate = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(voteUpdate)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.article).toBeInstanceOf(Array);
+        expect(body.article).toHaveLength(1);
+        body.article.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: 1,
+            author: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: 110,
+          });
+        });
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("201: request body accepts an object with newVote of -10 & responds with the updated article", () => {
+    const voteUpdate = { inc_votes: -10 };
+    return request(app)
+      .patch("/api/articles/2")
+      .send(voteUpdate)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.article).toBeInstanceOf(Array);
+        expect(body.article).toHaveLength(1);
+        body.article.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: 2,
+            author: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: -10,
+          });
+        });
+      });
+  });
+});

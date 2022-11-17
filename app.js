@@ -5,6 +5,7 @@ const {
   getArticleById,
   getCommentsByArticleId,
   postComment,
+  patchVotesById,
 } = require("./controller/news.controller");
 
 const app = express();
@@ -19,6 +20,8 @@ app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.post("/api/articles/:article_id/comments", postComment);
+
+app.patch("/api/articles/:article_id", patchVotesById);
 
 app.use((err, req, res, next) => {
   if (err.status === 204 && err.msg === "no content") {
