@@ -6,7 +6,7 @@ const {
   selectCommentsByArticleId,
   insertComment,
   updateVotesById,
-  selectUsers
+  selectUsers,
 } = require("../models/news.model");
 
 exports.getTopics = (req, res, next) => {
@@ -20,7 +20,8 @@ exports.getTopics = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectArticles()
+  const { topic, sort_by, order } = req.query;
+  selectArticles(topic, sort_by, order)
     .then((response) => {
       res.status(200).send({ article: response });
     })
