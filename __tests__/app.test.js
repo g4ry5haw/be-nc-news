@@ -512,3 +512,26 @@ describe("GET /api/articles (queries)", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id (comment_count)", () => {
+  test("200: returns an article object with the correct properties including comment_count", () => {
+    return request(app)
+      .get("/api/articles/9")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toBeInstanceOf(Array);
+        expect(body.article).toHaveLength(1);
+        body.article.forEach((article) => {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: 9,
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: 2,
+          });
+        });
+      });
+  });
+});
