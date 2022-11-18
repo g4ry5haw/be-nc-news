@@ -36,3 +36,19 @@ exports.checkUserExists = (newComment) => {
       }
     });
 };
+
+exports.checkTopicExists = (topic) => {
+  let queryStr = "SELECT * from topics";
+  const queryValues = [];
+
+  if (topic) {
+    queryStr += ` WHERE slug = $1`;
+    queryValues.push(topic);
+  }
+  return db.query(queryStr, queryValues).then((res) => {
+    if (res.rows.length === 0) {
+      // error if topic is not in the database
+      return Promise.reject({ status: 400, msg: "Invalid Topic" });
+    }
+  });
+};
