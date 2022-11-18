@@ -14,6 +14,7 @@ exports.checkArticleExists = (article_id) => {
       [article_id]
     )
     .then((res) => {
+      console.log(res.rows, 'utils')
       if (res.rows.length === 0) {
         // error if article_id is a number but is not in the database
         return Promise.reject({ status: 404, msg: "Article not found" });

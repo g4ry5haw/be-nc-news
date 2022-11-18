@@ -59,19 +59,37 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "desc") => {
 
 exports.selectArticleById = (article_id) => {
   return checkArticleExists(article_id).then(() => {
+    console.log("model");
+    console.log(article_id);
     return db
       .query(
         `
-      SELECT * from articles
-      WHERE article_id = $1
-      `,
+        SELECT articles.*, COUNT(comment_id)::INT AS comment_count 
+        FROM articles 
+        LEFT JOIN comments ON articles.article_id = comments.article_id 
+        WHERE articles.article_id = $1
+        GROUP BY articles.article_id
+        `,
         [article_id]
       )
       .then((result) => {
+        console.log(result.rows);
         return result.rows;
       });
   });
 };
+
+// exports.selectArticleByArticleId = async (articleId) => {
+//   const res = await db.query(
+//     `SELECT articles.*, COUNT(comment_id)::int AS comment_count 
+//     FROM articles 
+//     LEFT JOIN comments ON comments.article_id = articles.article_id 
+//     WHERE articles.article_id = $1 
+//     GROUP BY articles.article_id;`,
+//     [articleId]
+//   );
+//   return res.rows;
+// };
 
 exports.selectCommentsByArticleId = (article_id) => {
   return checkArticleExists(article_id).then(() => {
