@@ -14,6 +14,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/api/health", (req, res) => {
+  res.status(200).send({ msg: "server up and running" });
+});
+
 app.get("/api/topics", getTopics);
 
 app.get("/api/users", getUsers);
